@@ -1,0 +1,23 @@
+===================================================
+                                                               1.Introduction
+===================================================
+-Fire store is the real time database
+-NOSQL database 
+       -Collection: The main thing
+       -Record or document store inside collection/each record have unique ID
+       -Record contain field in the form of JSON
+-Simple to learn
+-Manage service by google 
+-Use SDK to communicate
+===================================================
+                                                               2.FireStore Database
+===================================================
+-Collection : It is a group of document with similar purpose
+Example COllection Name: Cafe or Chat app
+-Document: Use to store Data , in field-value pair , can have many data types (String,Number,dates,..)
++ Document ID is unique because it is used to identify the document
+
+
+3.Basic Syntax
+1. Initialize collection
+db.collection('cafes')
