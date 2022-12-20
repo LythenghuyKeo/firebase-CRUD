@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword , signInWithEmailAndPassword,signOut } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 import { getDatabase, ref, set,get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+import { getStorage, refe,uploadBytes,uploadString,getDownloadURL} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,7 +25,10 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider(app);
-const db = getDatabase();
+//const db = getDatabase();
+const storage = getStorage(app);
+const storageRef = refe(storage);
+const imageRef = refe(storage,'images/');
 document.getElementById('signinGGL').addEventListener('click',function(){
   signInWithPopup(auth, provider)
   .then((result) => {
@@ -51,8 +55,9 @@ document.getElementById("signInEMandPWD").addEventListener('click',function(){
     let pwd1 = document.getElementById('pwd1').value;
     let pwd2 = document.getElementById('pwd2').value;
     let password = ((pwd1===pwd2)&&(pwd1.length>6))?pwd1:alert('Wrong Password Please enter Again!');
+    let file = document.getElementById('preview').files[0];
     createUserWithEmailAndPassword(auth, mail, password)
-    .then(checkandInsert(mail,password),(userCredential) => {
+    .then(checkandInsert(mail,password,file),(userCredential) => {
       const user = userCredential.user;
       location.href='login.html';
       // ...
@@ -83,6 +88,27 @@ function checkandInsert(email,password){
     }
     }
   )
+
+}
+function AddImageStorage(file,id){
+  let message;
+  const reader = new FileReader();
+  uploadString(ref(storage,'images/'+ id), message, 'data_url').then((snapshot) => {
+    getDownloadURL(ref(storage, 'images/'+id))
+    .then((url) => {
+      const img = document.getElementById('myimg');
+      img.setAttribute('src', url);
+      console.log(id);
+    })
+    .catch((error) => {
+      // Handle any errors
+  });
+}, false);
+
+if (file) {
+  reader.readAsDataURL(file);
+}
+console.log(id);
 
 }
 

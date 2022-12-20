@@ -32,6 +32,7 @@ document.getElementById("login").addEventListener('click',function(){
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
+      console.log(user.uid);
       alert('Sign In successful');
       location.href='page1.html';
       // ...

@@ -60,14 +60,22 @@ document.getElementById('UploadFile').addEventListener('click',function(e){
   let message;
   let file = document.getElementById('preview').files[0];
   const reader = new FileReader();
-  const id = Date.now()+Math.floor((Math.random())*3e6);
-  console.log(id);
+  const id = Date.now()+Math.floor(Math.random());
+
   reader.addEventListener("load", () => {
     // convert image file to base64 string
     let user = auth.currentUser;
     message = reader.result;
     uploadString(ref(storage,'images/'+ id), message, 'data_url').then((snapshot) => {
-      console.log('Uploaded a data_url string!');
+      getDownloadURL(ref(storage, 'images/'+id))
+      .then((url) => {
+        const img = document.getElementById('myimg');
+        img.setAttribute('src', url);
+        console.log(id);
+      })
+      .catch((error) => {
+        // Handle any errors
+      });
     });
   }, false);
 
@@ -75,19 +83,7 @@ document.getElementById('UploadFile').addEventListener('click',function(e){
     reader.readAsDataURL(file);
   }
   console.log(id);
-  getDownloadURL(ref(storage, 'images/'+id))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
- 
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('myimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
+  
 
  
 }
